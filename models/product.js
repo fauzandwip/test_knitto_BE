@@ -8,13 +8,62 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	Product.init(
 		{
-			title: DataTypes.STRING,
-			description: DataTypes.STRING,
-			price: DataTypes.INTEGER,
-			stock: DataTypes.INTEGER,
-			brand: DataTypes.STRING,
-			category: DataTypes.STRING,
-			thumbnail: DataTypes.STRING,
+			title: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Title is required' },
+					notEmpty: { msg: 'Title is required' },
+				},
+			},
+			description: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Description is required' },
+					notEmpty: { msg: 'Description is required' },
+				},
+			},
+			price: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Price is required' },
+					notEmpty: { msg: 'Price is required' },
+				},
+			},
+			stock: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Stock is required' },
+					notEmpty: { msg: 'Stock is required' },
+				},
+			},
+			brand: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Brand is required' },
+					notEmpty: { msg: 'Brand is required' },
+				},
+			},
+			category: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Category is required' },
+					notEmpty: { msg: 'Category is required' },
+				},
+			},
+			thumbnail: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				validate: {
+					notNull: { msg: 'Thumbnail is required' },
+					notEmpty: { msg: 'Thumbnail is required' },
+				},
+			},
 		},
 		{
 			sequelize,

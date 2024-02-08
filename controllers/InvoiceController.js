@@ -62,7 +62,7 @@ class InvoiceController {
 		}
 	}
 
-	static async getInvoiceById(req, res, next) {
+	static async getInvoiceByOrderId(req, res, next) {
 		try {
 			const { orderId } = req.params;
 
