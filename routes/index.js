@@ -9,5 +9,6 @@ router.post('/login', UserController.login);
 
 router.use(authentication);
 router.use('/products', require('./products'));
+router.use('/invoices', require('./invoices'));
 
 module.exports = router;
