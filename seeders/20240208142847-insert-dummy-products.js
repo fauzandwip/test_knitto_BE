@@ -1,22 +1,42 @@
 'use strict';
 
 const fs = require('fs');
+const { createBufferFromImageURL } = require('../helpers/createBuffer');
+const { nanoid } = require('nanoid');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		const productsData = JSON.parse(
 			fs.readFileSync('./dummy_data/products.json', 'utf-8')
-		).map((data) => {
+		);
+
+		const promiseProducts = productsData.map(async (data) => {
+			const newObject = { ...data };
+			delete newObject.thumbnail;
+
+			const bufferImage = await createBufferFromImageURL(data.thumbnail);
+			const uniquePrefix = Date.now() + '-' + nanoid();
+			const imageURL =
+				'uploads/' +
+				uniquePrefix +
+				'-' +
+				data.title.split(' ').join('') +
+				'.jpg';
+
+			fs.writeFileSync(imageURL, bufferImage);
+
 			return {
-				...data,
+				...newObject,
+				thumbnail: imageURL,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
 		});
 
-		console.log(productsData);
-		await queryInterface.bulkInsert('Products', productsData);
+		const resultProducts = await Promise.all(promiseProducts);
+
+		await queryInterface.bulkInsert('Products', resultProducts);
 	},
 
 	async down(queryInterface, Sequelize) {
