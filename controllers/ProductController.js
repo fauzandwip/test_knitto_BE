@@ -85,6 +85,27 @@ class ProductController {
 			next(error);
 		}
 	}
+
+	static async deleteProduct(req, res, next) {
+		try {
+			const { id } = req.params;
+
+			const product = await Product.findByPk(id);
+
+			if (!product) {
+				throw {
+					name: 'NotFound',
+					message: 'Product not found',
+				};
+			}
+
+			product.destroy();
+
+			res.status(200).json({ message: `Product success to delete` });
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 
 module.exports = ProductController;
