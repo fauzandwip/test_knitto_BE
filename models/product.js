@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 				validate: {
+					min: {
+						args: 1,
+						msg: 'Price must be greater than or equal to 1',
+					},
 					notNull: { msg: 'Price is required' },
 					notEmpty: { msg: 'Price is required' },
 				},

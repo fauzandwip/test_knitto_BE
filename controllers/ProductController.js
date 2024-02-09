@@ -56,7 +56,31 @@ class ProductController {
 				thumbnail,
 			});
 
-			res.status(200).json({ message: `Product sucsess to update` });
+			res.status(200).json({ message: `Product success to update` });
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	static async updateStockProduct(req, res, next) {
+		try {
+			const { id } = req.params;
+			const { stock } = req.body;
+
+			const product = await Product.findByPk(id);
+
+			if (!product) {
+				throw {
+					name: 'NotFound',
+					message: 'Product not found',
+				};
+			}
+
+			product.update({
+				stock,
+			});
+
+			res.status(200).json({ message: `Product stock success to update` });
 		} catch (error) {
 			next(error);
 		}
