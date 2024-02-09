@@ -1,4 +1,5 @@
 const { Product } = require('../models');
+const fs = require('fs');
 
 class ProductController {
 	static async addProduct(req, res, next) {
@@ -13,7 +14,7 @@ class ProductController {
 				stock: +stock,
 				brand,
 				category,
-				thumbnail: file.buffer,
+				thumbnail: file.path,
 			});
 
 			res.status(201).json(newProduct);
@@ -24,7 +25,13 @@ class ProductController {
 
 	static async getProducts(req, res, next) {
 		try {
-			const products = await Product.findAll();
+			let products = await Product.findAll();
+			products = products.map((data) => {
+				const bufferImage = fs.readFileSync(data.thumbnail);
+				data.thumbnail = bufferImage;
+				return data;
+			});
+
 			res.status(200).json(products);
 		} catch (error) {
 			next(error);
