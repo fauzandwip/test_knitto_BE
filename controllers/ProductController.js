@@ -26,6 +26,7 @@ class ProductController {
 	static async getProducts(req, res, next) {
 		try {
 			let products = await Product.findAll();
+
 			products = products.map((data) => {
 				const bufferImage = fs.readFileSync(data.thumbnail);
 				data.thumbnail = bufferImage;

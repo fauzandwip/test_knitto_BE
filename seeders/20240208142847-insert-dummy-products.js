@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const { createBufferFromImageURL } = require('../helpers/createBuffer');
+const { nanoid } = require('nanoid');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -9,13 +10,25 @@ module.exports = {
 		const productsData = JSON.parse(
 			fs.readFileSync('./dummy_data/products.json', 'utf-8')
 		);
+
 		const promiseProducts = productsData.map(async (data) => {
 			const newObject = { ...data };
 			delete newObject.thumbnail;
 
+			const bufferImage = await createBufferFromImageURL(data.thumbnail);
+			const uniquePrefix = Date.now() + '-' + nanoid();
+			const imageURL =
+				'uploads/' +
+				uniquePrefix +
+				'-' +
+				data.title.split(' ').join('') +
+				'.jpg';
+
+			fs.writeFileSync(imageURL, bufferImage);
+
 			return {
 				...newObject,
-				thumbnail: await createBufferFromImageURL(data.thumbnail),
+				thumbnail: imageURL,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
