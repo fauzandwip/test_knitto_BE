@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			},
 			thumbnail: {
-				type: DataTypes.STRING,
+				type: DataTypes.BLOB('long'),
 				allowNull: false,
 				validate: {
 					notNull: { msg: 'Thumbnail is required' },

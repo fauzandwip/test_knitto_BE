@@ -17,9 +17,16 @@ const writeProducts = async () => {
 		const mappedProducts = response.products.map((data) => {
 			const { title, description, price, stock, brand, category, thumbnail } =
 				data;
-			return { title, description, price, stock, brand, category, thumbnail };
+			return {
+				title,
+				description,
+				price,
+				stock,
+				brand,
+				category,
+				thumbnail,
+			};
 		});
-		// console.log(JSON.stringify(mappedProducts));
 
 		await writeFile(
 			__dirname + '/../dummy_data/products.json',

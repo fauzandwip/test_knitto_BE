@@ -1,22 +1,29 @@
 'use strict';
 
 const fs = require('fs');
+const { createBufferFromImageURL } = require('../helpers/createBuffer');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		const productsData = JSON.parse(
 			fs.readFileSync('./dummy_data/products.json', 'utf-8')
-		).map((data) => {
+		);
+		const promiseProducts = productsData.map(async (data) => {
+			const newObject = { ...data };
+			delete newObject.thumbnail;
+
 			return {
-				...data,
+				...newObject,
+				thumbnail: await createBufferFromImageURL(data.thumbnail),
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
 		});
 
-		console.log(productsData);
-		await queryInterface.bulkInsert('Products', productsData);
+		const resultProducts = await Promise.all(promiseProducts);
+
+		await queryInterface.bulkInsert('Products', resultProducts);
 	},
 
 	async down(queryInterface, Sequelize) {
